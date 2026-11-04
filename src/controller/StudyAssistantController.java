@@ -12,7 +12,7 @@ public class StudyAssistantController {
     private final QuerySession model;
     private final List<LLMStrategy> strategies;
     private JButton askButton = new JButton("Ask Models");
-    private JTextArea questionArea = new JTextArea();
+    private JTextArea questionArea = new JTextArea(3, 60);
 
     public StudyAssistantController(StudyAssistantView view, QuerySession model, List<LLMStrategy> strategies) {
         this.model = model;

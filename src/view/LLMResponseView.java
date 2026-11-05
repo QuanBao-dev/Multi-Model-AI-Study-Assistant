@@ -2,12 +2,20 @@ package view;
 import java.awt.*;
 import javax.swing.*;
 
+/**
+ * A view for displaying the response and status of a specific LLM.
+ */
 public class LLMResponseView extends JPanel implements ModelObserver{
     private String modelName;
     private QuerySession model;
     private JLabel statusLabel;
     private JTextArea responseArea;
 
+    /**
+     * Constructs a response view for a specific LLM model.
+     * @param modelName
+     * @param model
+     */
     public LLMResponseView(String modelName, QuerySession model){
         this.modelName = modelName;
         this.model = model;
@@ -30,6 +38,9 @@ public class LLMResponseView extends JPanel implements ModelObserver{
 
     }
 
+    /**
+     * Refreshes panel when model changes, updating the status and response text.
+     */
     @Override
     public void modelChanged(){
         LLMResponse response = model.getResponse(modelName);

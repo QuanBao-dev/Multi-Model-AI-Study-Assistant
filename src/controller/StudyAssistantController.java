@@ -1,11 +1,11 @@
 package controller;
 
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.*;
 import javax.swing.*;
 import model.*;
 import view.*;
-import strategy.LLMStrategy;
+import strategy.*;
 
 /**
  * This class is a controllers that handles user input, requests changes to

@@ -1,6 +1,9 @@
 package view;
 import java.awt.*;
 import javax.swing.*;
+import model.LLMResponse;
+import model.QuerySession;
+import model.ModelObserver;
 
 /**
  * A view for displaying the response and status of a specific LLM.

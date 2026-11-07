@@ -1,6 +1,7 @@
 package view;
 import java.awt.*;
 import javax.swing.*;
+import model.QuerySession;
 
 /**
  * The View in MVC: holds the GUI components and is responsible for displaying the model's data to the user.

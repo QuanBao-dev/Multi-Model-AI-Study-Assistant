@@ -7,9 +7,9 @@ public enum ResponseStatus {
     WAITING("Waiting"),
     RUNNING("Running..."),
     SUCCESS("Done"),
-    FAILURE("Failed"),
+    FAILED("Failed"),
     TIMEOUT("Timed out"),
-    INVALID("Invalid response");
+    INVALID_RESPONSE("Invalid response");
 
     private final String label;
 

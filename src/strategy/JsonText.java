@@ -1,15 +1,5 @@
 package strategy;
 
-/**
- * Workaround helpers for the instructor-provided OllamaClient, which we may not edit.
- *
- * The provided client (1) puts the prompt into its JSON body WITHOUT escaping it, and
- * (2) returns the reply WITHOUT decoding JSON escapes. So the Strategy layer escapes the
- * question on the way out and decodes the reply on the way back.
- *
- * If the instructor ever fixes OllamaClient to do this itself, delete these two calls
- * in AbstractLLMStrategy, or text will be escaped twice.
- */
 public final class JsonText {
 
     /** Marker added when the provided client cut the reply off at an escaped quotation mark. */

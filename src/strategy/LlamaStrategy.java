@@ -1,13 +1,13 @@
 package strategy;
 
-import ollama.OllamaClient;
+import studyassistant.client.OllamaClient;
 
-public class LLamaStrategy extends AbstractLLMStrategy {
+public class LlamaStrategy extends AbstractLLMStrategy {
 
     public static final String DISPLAY_NAME = "Llama";
     public static final String MODEL_ID = "llama3.2:1b";
 
-    public LLamaStrategy(OllamaClient client){
+    public LlamaStrategy(OllamaClient client){
         super(client, DISPLAY_NAME, MODEL_ID);
     }
 

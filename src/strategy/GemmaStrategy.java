@@ -1,6 +1,6 @@
 package strategy;
 
-import ollama.OllamaClient;
+import studyassistant.client.OllamaClient;
 
 public class GemmaStrategy extends AbstractLLMStrategy{
 

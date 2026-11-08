@@ -1,7 +1,7 @@
 package strategy;
 
 import model.LLMResponse;
-import ollama.OllamaClient;
+import studyassistant.client.OllamaClient;
 
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -38,7 +38,7 @@ public abstract class AbstractLLMStrategy implements LLMStrategy {
         final CompletableFuture<String> raw;
 
         try{
-            raw = client.generate(modelId, question);
+            raw = client.generate(modelId, JsonText.escape(question));
         } catch (RuntimeException e){
             return CompletableFuture.failedFuture(e);
         }
@@ -47,7 +47,7 @@ public abstract class AbstractLLMStrategy implements LLMStrategy {
             return CompletableFuture.failedFuture(new IllegalStateException("OllamaClient returned no future"));
         }
 
-        return raw.thenApply(text -> toResponse(text, startNanos));
+        return raw.thenApply(text -> toResponse(JsonText.unescape(text), startNanos));
     }
 
     private LLMResponse toResponse(String rawText, long startNanos){

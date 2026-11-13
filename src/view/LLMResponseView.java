@@ -48,6 +48,7 @@ public class LLMResponseView extends JPanel implements ModelObserver{
      */
     @Override
     public void modelChanged(){
+        SwingUtilities.invokeLater(() -> {
         LLMResponse response = model.getResponse(modelName);
 
         if(response == null){
@@ -60,7 +61,7 @@ public class LLMResponseView extends JPanel implements ModelObserver{
         String modelResponse = response.getText();
 
         statusLabel.setText(status);
-        responseArea.setText(modelResponse);
-
+        responseArea.setText(modelResponse);;
+        });
     }
 }

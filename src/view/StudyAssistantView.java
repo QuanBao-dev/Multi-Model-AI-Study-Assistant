@@ -1,6 +1,7 @@
 package view;
 import java.awt.*;
 import javax.swing.*;
+import java.util.*;
 import model.QuerySession;
 
 /**
@@ -59,14 +60,13 @@ public class StudyAssistantView {
      * Builds the response panels for each LLM model and adds them to the main frame
      */
     private void buildResponses(){
-        JPanel responsePanels = new JPanel(new GridLayout(1,3));
+        List<String> modelNames = model.getModelNames();
+
+        JPanel responsePanels = new JPanel(new GridLayout(1,modelNames.size()));
         
-        LLMResponseView llamaView = new LLMResponseView("Llama",model);
-        LLMResponseView gemmaView = new LLMResponseView("Gemma",model);
-        LLMResponseView qwenView = new LLMResponseView("Qwen",model);
-        responsePanels.add(llamaView);
-        responsePanels.add(gemmaView);
-        responsePanels.add(qwenView);
+        for(String name:modelNames){
+            responsePanels.add(new LLMResponseView(name,model));
+        }
 
         frame.add(responsePanels,BorderLayout.CENTER);
     }

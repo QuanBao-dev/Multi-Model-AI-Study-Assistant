@@ -16,8 +16,8 @@ public class LLMResponseView extends JPanel implements ModelObserver{
 
     /**
      * Constructs a response view for a specific LLM model.
-     * @param modelName the name of the LLM whose respose this panel will display.
-     * @param model the shared query session model contianing the response data.s
+     * @param modelName the name of the LLM whose response this panel will display.
+     * @param model the shared query session model containing the response data.
      */
     public LLMResponseView(String modelName, QuerySession model){
         this.modelName = modelName;
@@ -61,7 +61,7 @@ public class LLMResponseView extends JPanel implements ModelObserver{
         String modelResponse = response.getText();
 
         statusLabel.setText(status);
-        responseArea.setText(modelResponse);;
+        responseArea.setText(modelResponse);
         });
     }
 }

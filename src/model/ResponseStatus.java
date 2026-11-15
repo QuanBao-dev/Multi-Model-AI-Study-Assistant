@@ -20,4 +20,9 @@ public enum ResponseStatus {
     public String getLabel() {
         return label;
     }
+
+    /** The label followed by how long the request took in ms, e.g. "Done - 1200". */
+    public String getLabelWithTime(long timeMs) {
+        return label + " - " + timeMs;
+    }
 }

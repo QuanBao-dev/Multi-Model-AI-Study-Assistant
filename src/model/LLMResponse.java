@@ -51,8 +51,13 @@ public final class LLMResponse {
         return status;
     }
 
+    /** The status label for the view. A successful answer also shows its response time. */
     public String getStatusString() {
-        return status.getLabel();
+        if (status == ResponseStatus.SUCCESS) {
+            return status.getLabelWithTime(responseTimeMs);
+        } else {
+            return status.getLabel();
+        }
     }
 
     /** The answer on success, or the error message otherwise, so the view can always show it. */

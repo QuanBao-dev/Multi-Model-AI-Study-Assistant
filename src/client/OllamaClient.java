@@ -1,4 +1,3 @@
-
 package client;
 
 import java.net.URI;
@@ -16,14 +15,24 @@ public class OllamaClient {
     // Create one HTTP client for sending requests to Ollama.
     private final HttpClient client = HttpClient.newHttpClient();
 
-    // Send a prompt to a specified Ollama model.
+    /**
+     * Sends a prompt asynchronously to the specified Ollama model.
+     * 
+     * Preconditions: modelName and prompt is not null or blank.
+     * Postcondition: The returned future completes with the generated response
+     * text, or completes exceptionally if the request fails.
+     *
+     * @param modelName the name of the Ollama model to use
+     * @param prompt    the question or instruction sent to the model
+     * @return a future containing the generated response text
+     */
     public CompletableFuture<String> generate(
             String modelName,
             String prompt) {
 
         // Create the JSON request body required by Ollama.
-        String json = "{\"model\":\"" + modelName
-                + "\",\"prompt\":\"" + prompt
+        String json = "{\"model\":\"" + escapeJson(modelName)
+                + "\",\"prompt\":\"" + escapeJson(prompt)
                 + "\",\"stream\":false}";
 
         // Build the HTTP request.
@@ -69,7 +78,15 @@ public class OllamaClient {
                 });
     }
 
-    // Extract the generated text from Ollama's JSON response.
+    /**
+     * Extract the generated text from Ollama's JSON response.
+     * 
+     * Precondition: The JSON string contains a valid response field.
+     * Postcondition: Returns the generated text with escaped characters decoded.
+     * 
+     * @param json the raw JSON response returned by Ollama
+     * @return the generated response text
+     */
     private String getResponseText(String json) {
         // Locate the beginning of the "response" value.
         String marker = "\"response\":\"";
@@ -117,5 +134,23 @@ public class OllamaClient {
         }
 
         return result.toString();
+    }
+
+    /**
+     * Escapes special characters in a string so that it can be safely embedded
+     * as a JSON string value.
+     *
+     * @param value the raw string to escape
+     * @return the escaped string safe for use inside a JSON string literal
+     */
+    private static String escapeJson(String value) {
+        return value
+                .replace("\\", "\\\\")
+                .replace("\"", "\\\"")
+                .replace("\b", "\\b")
+                .replace("\f", "\\f")
+                .replace("\n", "\\n")
+                .replace("\r", "\\r")
+                .replace("\t", "\\t");
     }
 }

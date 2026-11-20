@@ -67,11 +67,6 @@ public class StudyAssistantController {
     private void askModels() {
         String question = questionArea.getText().trim();
 
-        if (question.isBlank()) {
-            JOptionPane.showMessageDialog(null, "Please enter a question.", "Input error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
         model.beginQuery(question);
 
         for (LLMStrategy strategy : strategies) {
@@ -82,9 +77,10 @@ public class StudyAssistantController {
     /**
      * Starts an asynchronous request for one language model.
      *
-     * Preconditions: strategy is not null and question is not null
-     * or blank.
-     * Postcondition: The model is eventually updated with a new response.
+     * Preconditions: strategy and question must not be null, and the question
+     * must not be blank.
+     * Postconditions: An asynchronous request is started. When it completes, an
+     * LLMResponse is stored in the model for the selected model name.
      *
      * @param strategy the strategy used to generate the response
      * @param question the user's question
@@ -94,6 +90,19 @@ public class StudyAssistantController {
         String modelName = strategy.getDisplayName();
         strategy.generate(question)
                 .orTimeout(REQUEST_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+                .thenApply(response -> {
+                    if (response == null
+                            || response.getText() == null
+                            || response.getText().isBlank()) {
+
+                        return LLMResponse.invalid(
+                                modelName,
+                                "The response was empty.",
+                                elapsed(start));
+                    }
+
+                    return response;
+                })
                 .thenAccept(response -> model.updateResponse(modelName, response))
                 .exceptionally(error -> {
                     LLMResponse response;

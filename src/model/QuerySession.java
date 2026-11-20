@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The Model in MVC: holds the model names, the current question and each model's answer.
- * Knows nothing about Swing or strategies, only model names.
+ * The Model in MVC: holds the model names, the current question and each
+ * model's answer. Knows nothing about Swing or strategies, only model names.
  */
 public class QuerySession {
     private List<String> modelNames = new ArrayList<>();
@@ -36,12 +36,8 @@ public class QuerySession {
 
     /**
      * Starts a new question and marks every model as running.
-     * @throws IllegalArgumentException if the question is blank
      */
     public void beginQuery(String question) {
-        if (question == null || question.isBlank()) {
-            throw new IllegalArgumentException("Question can't be blank");
-        }
         this.question = question;
         responses.clear();
         for (String name : modelNames) {

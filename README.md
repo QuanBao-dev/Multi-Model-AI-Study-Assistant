@@ -7,7 +7,9 @@ Every pull request and every push to `main` is checked by GitHub Actions
 tests under `src/tests/`, and attaches a runnable `study-assistant.jar` to the
 run.
 
-To run the same steps on your machine, from the repository root:
+To run the same steps on your machine, from the repository root (macOS or
+Linux; on Windows use Git Bash and write `;` instead of `:` in the class
+paths):
 
 ```sh
 # 1. Get the JUnit jar once (lib/ is ignored by git)

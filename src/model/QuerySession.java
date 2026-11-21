@@ -52,9 +52,6 @@ public class QuerySession {
      * Answers for a model that isn't in modelNames are ignored.
      */
     public void updateResponse(String modelName, LLMResponse response) {
-        if (!modelNames.contains(modelName)) {
-            return;
-        }
         responses.put(modelName, response);
         notifyObservers();
     }

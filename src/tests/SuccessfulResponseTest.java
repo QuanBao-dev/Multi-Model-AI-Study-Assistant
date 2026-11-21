@@ -17,11 +17,7 @@ public class SuccessfulResponseTest {
     @Test
     void validMockResponseResultsInSuccess() {
         LLMStrategy mockStrategy = new MockLLMStrategy();
-
-        QuerySession model = new QuerySession();
-        StudyAssistantController controller = new StudyAssistantController(new StudyAssistantView(model),
-                model, List.of());
-        LLMResponse response = controller.request(mockStrategy, "What is polymorphism?", 15).join();
+        LLMResponse response = StudyAssistantController.request(mockStrategy, "What is polymorphism?", 15).join();
 
         assertNotNull(response);
         assertEquals(ResponseStatus.SUCCESS, response.getStatus());

@@ -17,11 +17,7 @@ public class FailureTest {
     @Test
     public void exceptionalMockCompletionResultsInFailedResponse() {
         LLMStrategy failingStrategy = new MockLLMStrategy();
-
-        QuerySession model = new QuerySession();
-        StudyAssistantController controller = new StudyAssistantController(new StudyAssistantView(model),
-                model, List.of());
-        LLMResponse failedResponse = controller.request(failingStrategy, "What is polymorphism?", 15).join();
+        LLMResponse failedResponse = StudyAssistantController.request(failingStrategy, "What is polymorphism?", 15).join();
 
         assertNotNull(failedResponse);
         assertEquals(ResponseStatus.FAILED, failedResponse.getStatus());

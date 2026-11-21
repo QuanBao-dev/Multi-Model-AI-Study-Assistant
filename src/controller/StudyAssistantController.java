@@ -54,7 +54,7 @@ public class StudyAssistantController {
      * @return a future containing the generated, invalid, timeout, or failure
      *         response
      */
-    public CompletableFuture<LLMResponse> request(LLMStrategy strategy, String question, long timeout) {
+    public static CompletableFuture<LLMResponse> request(LLMStrategy strategy, String question, long timeout) {
         long start = System.currentTimeMillis();
         String modelName = strategy.getDisplayName();
 

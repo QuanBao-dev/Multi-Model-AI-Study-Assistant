@@ -19,11 +19,7 @@ public class TimeoutTest {
     void slowMockCompletionResultsInTimeoutResponse() {
         LLMStrategy slowStrategy = new MockLLMStrategy();
 
-        QuerySession model = new QuerySession();
-        StudyAssistantController controller = new StudyAssistantController(new StudyAssistantView(model),
-                model, List.of());
-
-        LLMResponse timeoutResponse = controller.request(slowStrategy, "What is polymorphism?", REQUEST_TIMEOUT_SECONDS)
+        LLMResponse timeoutResponse = StudyAssistantController.request(slowStrategy, "What is polymorphism?", REQUEST_TIMEOUT_SECONDS)
                 .join();
 
         assertNotNull(timeoutResponse);

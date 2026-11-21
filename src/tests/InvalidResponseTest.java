@@ -16,11 +16,7 @@ public class InvalidResponseTest {
     @Test
     public void emptyResponseResultsInInvalidResponse() {
         LLMStrategy invalidStrategy = new MockLLMStrategy();
-
-        QuerySession model = new QuerySession();
-        StudyAssistantController controller = new StudyAssistantController(new StudyAssistantView(model),
-                model, List.of());
-        LLMResponse response = controller.request(invalidStrategy, "", 15).join();
+        LLMResponse response = StudyAssistantController.request(invalidStrategy, "", 15).join();
 
         assertNotNull(response);
         assertEquals(ResponseStatus.INVALID_RESPONSE, response.getStatus());

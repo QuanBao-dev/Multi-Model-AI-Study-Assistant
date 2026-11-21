@@ -1,0 +1,19 @@
+package strategy;
+
+import java.client.OllamaClient;
+
+public class GemmaStrategy extends AbstractLLMStrategy{
+
+    public static final String DISPLAY_NAME = "Gemma";
+    public static final String MODEL_ID = "gemma3:1b";
+
+    @Override
+    public String getDisplayName() {
+        return DISPLAY_NAME;
+    }
+
+    public GemmaStrategy(OllamaClient client){
+        super(client, DISPLAY_NAME, MODEL_ID);
+    }
+
+}

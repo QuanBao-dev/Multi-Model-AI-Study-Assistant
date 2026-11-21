@@ -1,7 +1,7 @@
 package strategy;
 
 import java.util.regex.Pattern;
-import java.client.OllamaClient;
+import client.OllamaClient;
 
 public class QwenStrategy extends AbstractLLMStrategy {
 
@@ -16,6 +16,6 @@ public class QwenStrategy extends AbstractLLMStrategy {
     }
 
     public QwenStrategy(OllamaClient client){
-        super(client, DISPLAY_NAME, MODEL_NAME);
+        super(client, DISPLAY_NAME, MODEL_ID);
     }
 }

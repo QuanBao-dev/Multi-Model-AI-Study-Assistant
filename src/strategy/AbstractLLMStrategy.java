@@ -1,7 +1,7 @@
 package strategy;
 
 import model.LLMResponse;
-import java.client.OllamaClient;
+import client.OllamaClient;
 
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;

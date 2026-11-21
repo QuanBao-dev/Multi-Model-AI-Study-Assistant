@@ -1,6 +1,6 @@
 package strategy;
 
-import java.client.OllamaClient;
+import client.OllamaClient;
 
 public class LlamaStrategy extends AbstractLLMStrategy {
 

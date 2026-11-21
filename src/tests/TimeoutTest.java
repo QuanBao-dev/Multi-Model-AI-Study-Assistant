@@ -2,7 +2,6 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import org.junit.jupiter.api.Test;
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import controller.StudyAssistantController;
 import model.*;
 import strategy.*;
-import view.*;
 
 public class TimeoutTest {
     private static final long REQUEST_TIMEOUT_SECONDS = 0;
@@ -19,11 +17,8 @@ public class TimeoutTest {
     void slowMockCompletionResultsInTimeoutResponse() {
         LLMStrategy slowStrategy = new MockLLMStrategy();
 
-        QuerySession model = new QuerySession();
-        StudyAssistantController controller = new StudyAssistantController(new StudyAssistantView(model),
-                model, List.of());
-
-        LLMResponse timeoutResponse = controller.request(slowStrategy, "What is polymorphism?", REQUEST_TIMEOUT_SECONDS)
+        LLMResponse timeoutResponse = StudyAssistantController
+                .request(slowStrategy, "What is polymorphism?", REQUEST_TIMEOUT_SECONDS)
                 .join();
 
         assertNotNull(timeoutResponse);
@@ -47,7 +42,7 @@ public class TimeoutTest {
                     throw new RuntimeException(exception);
                 }
 
-                return LLMResponse.success("Mock", "Late response", 200);
+                return LLMResponse.success("Mock", "Late response", 3000);
             });
         }
     }

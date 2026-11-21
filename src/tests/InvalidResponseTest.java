@@ -2,7 +2,6 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import org.junit.Test;
@@ -10,17 +9,13 @@ import org.junit.Test;
 import controller.StudyAssistantController;
 import model.*;
 import strategy.LLMStrategy;
-import view.StudyAssistantView;
 
 public class InvalidResponseTest {
     @Test
     public void emptyResponseResultsInInvalidResponse() {
         LLMStrategy invalidStrategy = new MockLLMStrategy();
 
-        QuerySession model = new QuerySession();
-        StudyAssistantController controller = new StudyAssistantController(new StudyAssistantView(model),
-                model, List.of());
-        LLMResponse response = controller.request(invalidStrategy, "", 15).join();
+        LLMResponse response = StudyAssistantController.request(invalidStrategy, "", 15).join();
 
         assertNotNull(response);
         assertEquals(ResponseStatus.INVALID_RESPONSE, response.getStatus());

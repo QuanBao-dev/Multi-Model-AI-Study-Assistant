@@ -2,7 +2,6 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import org.junit.jupiter.api.Test;
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import controller.StudyAssistantController;
 import model.*;
 import strategy.*;
-import view.StudyAssistantView;
 
 public class SuccessfulResponseTest {
 
@@ -18,10 +16,9 @@ public class SuccessfulResponseTest {
     void validMockResponseResultsInSuccess() {
         LLMStrategy mockStrategy = new MockLLMStrategy();
 
-        QuerySession model = new QuerySession();
-        StudyAssistantController controller = new StudyAssistantController(new StudyAssistantView(model),
-                model, List.of());
-        LLMResponse response = controller.request(mockStrategy, "What is polymorphism?", 15).join();
+        LLMResponse response = StudyAssistantController
+                .request(mockStrategy, "What is polymorphism?", 15)
+                .join();
 
         assertNotNull(response);
         assertEquals(ResponseStatus.SUCCESS, response.getStatus());

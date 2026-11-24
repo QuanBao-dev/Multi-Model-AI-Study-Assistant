@@ -30,8 +30,13 @@ public abstract class AbstractLLMStrategy implements LLMStrategy {
 
     @Override
     public CompletableFuture<LLMResponse> generate(String question){
-        long start = System.currentTimeMillis();
-        return client.generate(modelId, question).thenApply(text -> LLMResponse.success(displayName, text, System.currentTimeMillis() - start));
+
+        if (question == null || question.isBlank()) {
+            return CompletableFuture.failedFuture(new IllegalArgumentException("Question cannot be blank"));
+        }
+
+        long startNanos = System.nanoTime();
+        return client.generate(modelId, question).thenApply(text -> toResponse(text,startNanos));
     }
 
     private LLMResponse toResponse(String rawText, long startNanos){

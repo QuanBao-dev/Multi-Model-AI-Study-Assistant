@@ -6,54 +6,50 @@ import client.OllamaClient;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
-//Shared logic between all the Ollama-backed strategies
+/**
+ * Provides shared implementation logic for Ollama-backed strategies.
+ */
 public abstract class AbstractLLMStrategy implements LLMStrategy {
 
     private final OllamaClient client;
     private final String displayName;
     private final String modelId;
 
-    protected AbstractLLMStrategy(OllamaClient client, String displayName, String modelId){
+    /**
+     * Creates an Ollama-backed strategy.
+     *
+     * @param client      the shared client used to communicate with Ollama
+     * @param displayName the name shown to the user
+     * @param modelId     the model identifier accepted by Ollama
+     * @throws NullPointerException if any argument is {@code null}
+     */
+    protected AbstractLLMStrategy(OllamaClient client, String displayName, String modelId) {
         this.client = Objects.requireNonNull(client, "client");
         this.displayName = Objects.requireNonNull(displayName, "displayName");
         this.modelId = Objects.requireNonNull(modelId, "modelId");
     }
 
+    /**
+     * Returns the configured user-facing model name.
+     *
+     * @return the display name of this strategy
+     */
     @Override
-    public String getDisplayName(){
+    public String getDisplayName() {
         return displayName;
     }
 
-    public String getModelId(){
-        return modelId;
-    }
-
+    /**
+     * Sends a question through Ollama and converts the generated text into an
+     * LLMResponse.
+     *
+     * @param question the question or prompt sent to the configured model
+     * @return a future containing the model response
+     */
     @Override
-    public CompletableFuture<LLMResponse> generate(String question){
-
-        if (question == null || question.isBlank()) {
-            return CompletableFuture.failedFuture(new IllegalArgumentException("Question cannot be blank"));
-        }
-
-        long startNanos = System.nanoTime();
-        return client.generate(modelId, question).thenApply(text -> toResponse(text,startNanos));
-    }
-
-    private LLMResponse toResponse(String rawText, long startNanos){
-        long elapsedMs = (System.nanoTime() - startNanos) / 1_000_000L;
-        String cleaned = postProcess(rawText);
-        if(cleaned == null || cleaned.isBlank()){
-            return LLMResponse.invalid(displayName, "Model " + modelId + " returned an empty response", elapsedMs);
-        }
-        return LLMResponse.success(displayName, cleaned.strip(), elapsedMs);
-    }
-
-    protected String postProcess(String rawText){
-        return rawText;
-    }
-
-    @Override
-    public String toString(){
-        return getClass().getSimpleName() + "[" + displayName + " -> " + modelId + "]";
+    public CompletableFuture<LLMResponse> generate(String question) {
+        long start = System.currentTimeMillis();
+        return client.generate(modelId, question)
+                .thenApply(text -> LLMResponse.success(displayName, text, System.currentTimeMillis() - start));
     }
 }

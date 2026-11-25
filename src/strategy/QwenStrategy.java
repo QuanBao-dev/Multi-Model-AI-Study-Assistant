@@ -1,21 +1,33 @@
 package strategy;
 
-import java.util.regex.Pattern;
 import client.OllamaClient;
 
+/**
+ * Strategy for generating responses with the Qwen Ollama model.
+ */
 public class QwenStrategy extends AbstractLLMStrategy {
 
     public static final String DISPLAY_NAME = "Qwen";
+
     public static final String MODEL_ID = "qwen3:1.7b";
 
-    private static final Pattern THINK_BLOCK = Pattern.compile("(?s)<think>.*?</think>");
-
+    /**
+     * Returns the display name used by the user interface.
+     *
+     * @return "Qwen"
+     */
     @Override
     public String getDisplayName() {
         return DISPLAY_NAME;
     }
 
-    public QwenStrategy(OllamaClient client){
+    /**
+     * Creates a Qwen strategy using the shared Ollama client.
+     *
+     * @param client the client used to send requests
+     * @throws NullPointerException if client is null
+     */
+    public QwenStrategy(OllamaClient client) {
         super(client, DISPLAY_NAME, MODEL_ID);
     }
 }

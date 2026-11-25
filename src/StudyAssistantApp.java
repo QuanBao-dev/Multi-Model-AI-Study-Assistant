@@ -6,7 +6,17 @@ import model.*;
 import strategy.*;
 import view.*;
 
+/**
+ * This class helps run the Multi-Model AI Study Assistant application.
+ */
 public class StudyAssistantApp {
+    /**
+     * Starts the Study Assistant application. The application uses one shared
+     * OllamaClient for the Llama, Gemma, and Qwen strategies. It then creates the
+     * MVC components and initializes the controller.
+     *
+     * @param args command-line arguments; not used by this application
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             OllamaClient client = new OllamaClient();

@@ -13,7 +13,7 @@ import strategy.*;
  * update the model with the results.
  */
 public class StudyAssistantController {
-    private static final long REQUEST_TIMEOUT_SECONDS = 15;
+    private static final long REQUEST_TIMEOUT_SECONDS = 60;
     private final QuerySession model;
     private final List<LLMStrategy> strategies;
     private JButton askButton = new JButton("Ask Models");
@@ -36,6 +36,55 @@ public class StudyAssistantController {
         askButton.addActionListener(e -> askModels());
         updateModelNames(strategies);
         view.buildInterface(askButton, questionArea);
+    }
+
+    /**
+     * Asynchronously generates a response using the specified language-model
+     * strategy and applies a timeout.
+     *
+     * Preconditions: strategy must not be null, and timeout should be
+     * greater than zero.
+     * Postconditions: The returned future completes with an LLMResponse it does not
+     * normally complete exceptionally because request errors are converted into
+     * response statuses.
+     *
+     * @param strategy the strategy used to generate the response
+     * @param question the question sent to the language model
+     * @param timeout  the maximum request time, in seconds
+     * @return a future containing the generated, invalid, timeout, or failure
+     *         response
+     */
+    public static CompletableFuture<LLMResponse> request(LLMStrategy strategy, String question, long timeout) {
+        long start = System.currentTimeMillis();
+        String modelName = strategy.getDisplayName();
+
+        return strategy.generate(question)
+                .orTimeout(timeout, TimeUnit.SECONDS)
+                .thenApply(response -> {
+                    if (response == null
+                            || response.getText() == null
+                            || response.getText().isBlank()) {
+                        return LLMResponse.invalid(
+                                modelName,
+                                "The response was empty.",
+                                elapsed(start));
+                    }
+
+                    return response;
+                })
+                .exceptionally(error -> {
+                    if (error.getCause() instanceof TimeoutException) {
+                        return LLMResponse.timeout(
+                                modelName,
+                                "Request timed out.",
+                                elapsed(start));
+                    }
+
+                    return LLMResponse.failure(
+                            modelName,
+                            "Request failed.",
+                            elapsed(start));
+                });
     }
 
     /**
@@ -86,36 +135,9 @@ public class StudyAssistantController {
      * @param question the user's question
      */
     private void startRequest(LLMStrategy strategy, String question) {
-        long start = System.currentTimeMillis();
         String modelName = strategy.getDisplayName();
-        strategy.generate(question)
-                .orTimeout(REQUEST_TIMEOUT_SECONDS, TimeUnit.SECONDS)
-                .thenApply(response -> {
-                    if (response == null
-                            || response.getText() == null
-                            || response.getText().isBlank()) {
-
-                        return LLMResponse.invalid(
-                                modelName,
-                                "The response was empty.",
-                                elapsed(start));
-                    }
-
-                    return response;
-                })
-                .thenAccept(response -> model.updateResponse(modelName, response))
-                .exceptionally(error -> {
-                    LLMResponse response;
-
-                    if (error.getCause() instanceof TimeoutException) {
-                        response = LLMResponse.timeout(modelName, "Request timed out.", elapsed(start));
-                    } else {
-                        response = LLMResponse.failure(modelName, "Request failed.", elapsed(start));
-                    }
-
-                    model.updateResponse(modelName, response);
-                    return null;
-                });
+        request(strategy, question, REQUEST_TIMEOUT_SECONDS)
+                .thenAccept(response -> model.updateResponse(modelName, response));
     }
 
     /**

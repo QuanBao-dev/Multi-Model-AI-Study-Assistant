@@ -13,7 +13,7 @@ import strategy.*;
  * update the model with the results.
  */
 public class StudyAssistantController {
-    private static final long REQUEST_TIMEOUT_SECONDS = 15;
+    private static final long REQUEST_TIMEOUT_SECONDS = 60;
     private final QuerySession model;
     private final List<LLMStrategy> strategies;
     private JButton askButton = new JButton("Ask Models");

@@ -11,7 +11,7 @@ import model.*;
 import strategy.*;
 
 public class TimeoutTest {
-    private static final long REQUEST_TIMEOUT_SECONDS = 0;
+    private static final long REQUEST_TIMEOUT_SECONDS = 1;
 
     @Test
     void slowMockCompletionResultsInTimeoutResponse() {

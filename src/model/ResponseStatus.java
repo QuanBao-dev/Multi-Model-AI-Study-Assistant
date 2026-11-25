@@ -6,7 +6,7 @@ package model;
 public enum ResponseStatus {
     WAITING("Waiting"),
     RUNNING("Running..."),
-    SUCCESS("Done"),
+    SUCCESS("Success"),
     FAILED("Failed"),
     TIMEOUT("Timed out"),
     INVALID_RESPONSE("Invalid response");
@@ -21,8 +21,11 @@ public enum ResponseStatus {
         return label;
     }
 
-    /** The label followed by how long the request took in ms, e.g. "Done - 1200". */
+    /**
+     * The label followed by how long the request took in ms, e.g. "Success - 1200
+     * ms".
+     */
     public String getLabelWithTime(long timeMs) {
-        return label + " - " + timeMs;
+        return label + " - " + timeMs + " ms";
     }
 }
